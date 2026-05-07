@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- ✅ IMPORTANT FOR MOBILE -->
+<!-- 📱 MOBILE FIX -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ConvoMate</title>
@@ -12,156 +12,99 @@
 
 body {
     margin: 0;
-    font-family: "Inter", Arial, sans-serif;
-    background: radial-gradient(circle at top, #141726, #0b0d12);
+    font-family: Arial, sans-serif;
+    background: #0f1117;
     color: white;
     display: flex;
     height: 100vh;
     overflow: hidden;
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
     width: 260px;
-    background: rgba(10, 12, 18, 0.7);
-    backdrop-filter: blur(12px);
-    border-right: 1px solid rgba(255,255,255,0.06);
-    padding: 22px;
-    flex-shrink: 0;
+    background: #0b0d12;
+    border-right: 1px solid #1f2430;
+    padding: 16px;
+    overflow-y: auto;
 }
 
 .sidebar h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
     color: #9b7bff;
 }
 
-.credit {
+.history-item {
+    background: rgba(255,255,255,0.05);
+    padding: 10px;
     margin-top: 10px;
+    border-radius: 8px;
     font-size: 12px;
-    color: #888;
+    cursor: pointer;
 }
 
-/* Chat container */
+/* CHAT */
 .chat-container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-width: 0;
 }
 
-/* Chat box */
 .chat-box {
     flex: 1;
-    padding: 24px;
+    padding: 16px;
     overflow-y: auto;
 }
 
-/* Messages */
 .msg {
     margin: 10px 0;
-    padding: 14px 16px;
-    border-radius: 16px;
-    max-width: 70%;
-    line-height: 1.5;
-    font-size: 14px;
-    word-wrap: break-word;
+    padding: 12px;
+    border-radius: 12px;
+    max-width: 75%;
+    white-space: pre-wrap;
 }
 
-/* user */
 .user {
-    background: linear-gradient(135deg, #7c5cff, #9b7bff);
+    background: #7c5cff;
     margin-left: auto;
-    text-align: right;
 }
 
-/* bot */
 .bot {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: #1a1f2b;
 }
 
-/* input area */
+/* INPUT */
 .input-area {
     display: flex;
-    padding: 14px;
-    background: rgba(10, 12, 18, 0.7);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 12px;
+    border-top: 1px solid #222;
 }
 
 input {
     flex: 1;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 12px;
+    border-radius: 8px;
     border: none;
     outline: none;
-    background: rgba(255,255,255,0.06);
-    color: white;
-    font-size: 14px;
 }
 
 button {
-    margin-left: 10px;
-    padding: 14px 18px;
+    margin-left: 8px;
+    padding: 12px 16px;
     border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #7c5cff, #9b7bff);
+    border-radius: 8px;
+    background: #7c5cff;
     color: white;
-    cursor: pointer;
 }
 
-/* ========================= */
-/* 📱 MOBILE RESPONSIVENESS */
-/* ========================= */
-
-@media (max-width: 900px) {
-
+/* 📱 MOBILE */
+@media (max-width: 768px) {
     .sidebar {
-        width: 200px;
-        padding: 16px;
-    }
-
-    .msg {
-        max-width: 80%;
-    }
-}
-
-/* 📱 SMALL MOBILE */
-@media (max-width: 700px) {
-
-    body {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-        padding: 12px;
-        text-align: center;
-    }
-
-    .chat-box {
-        padding: 12px;
+        display: none;
     }
 
     .msg {
         max-width: 90%;
         font-size: 13px;
-    }
-
-    .input-area {
-        padding: 10px;
-    }
-
-    input {
-        font-size: 13px;
-        padding: 12px;
-    }
-
-    button {
-        padding: 12px 14px;
     }
 }
 
@@ -170,35 +113,62 @@ button {
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>ConvoMate 🤖</h2>
-    <p style="color:#aaa;font-size:13px;">
-        AI assistant powered by Groq
-    </p>
+    <p style="font-size:12px;color:#aaa;">built by Arjun Mondal</p>
 
-    <div class="credit">
-        built with ❤️ by <b style="color:#c2a8ff;">Arjun Mondal</b>
-    </div>
+    <h4>History</h4>
+    <div id="history"></div>
 </div>
 
+<!-- CHAT -->
 <div class="chat-container">
 
-    <div class="chat-box" id="chat-box"></div>
+    <div class="chat-box" id="chat"></div>
 
     <div class="input-area">
         <input id="input" placeholder="Ask anything..." />
-        <button onclick="sendMessage()">Send</button>
+        <button onclick="send()">Send</button>
     </div>
 
 </div>
 
 <script>
-async function sendMessage() {
+
+function addHistory(text) {
+    let box = document.getElementById("history");
+
+    let item = document.createElement("div");
+    item.className = "history-item";
+    item.innerText = text.slice(0, 40);
+
+    item.onclick = () => {
+        document.getElementById("input").value = text;
+    };
+
+    box.prepend(item);
+}
+
+function addMsg(text, type) {
+    let chat = document.getElementById("chat");
+
+    let div = document.createElement("div");
+    div.className = "msg " + type;
+    div.innerText = text;
+
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+async function send() {
+
     let input = document.getElementById("input");
     let text = input.value;
     if (!text) return;
 
-    addMessage(text, "user");
+    addMsg(text, "user");
+    addHistory(text);
     input.value = "";
 
     let res = await fetch("/chat", {
@@ -208,17 +178,9 @@ async function sendMessage() {
     });
 
     let data = await res.json();
-    addMessage(data.reply, "bot");
+    addMsg(data.reply, "bot");
 }
 
-function addMessage(text, type) {
-    let box = document.getElementById("chat-box");
-    let msg = document.createElement("div");
-    msg.className = "msg " + type;
-    msg.innerText = text;
-    box.appendChild(msg);
-    box.scrollTop = box.scrollHeight;
-}
 </script>
 
 </body>
