@@ -3,34 +3,45 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- 📱 MOBILE FIX -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 🔥 CRITICAL MOBILE FIX -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <title>ConvoMate</title>
 
 <style>
 
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: Arial, sans-serif;
     background: #0f1117;
     color: white;
-    display: flex;
     height: 100vh;
     overflow: hidden;
 }
 
-/* SIDEBAR */
+/* MAIN LAYOUT */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* SIDEBAR (desktop only) */
 .sidebar {
     width: 260px;
     background: #0b0d12;
     border-right: 1px solid #1f2430;
-    padding: 16px;
+    padding: 15px;
     overflow-y: auto;
 }
 
 .sidebar h2 {
     color: #9b7bff;
+    font-size: 20px;
 }
 
 .history-item {
@@ -42,16 +53,18 @@ body {
     cursor: pointer;
 }
 
-/* CHAT */
-.chat-container {
+/* CHAT AREA */
+.chat {
     flex: 1;
     display: flex;
     flex-direction: column;
+    height: 100vh;
 }
 
+/* MESSAGES */
 .chat-box {
     flex: 1;
-    padding: 16px;
+    padding: 12px;
     overflow-y: auto;
 }
 
@@ -59,8 +72,9 @@ body {
     margin: 10px 0;
     padding: 12px;
     border-radius: 12px;
-    max-width: 75%;
+    max-width: 80%;
     white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .user {
@@ -75,8 +89,9 @@ body {
 /* INPUT */
 .input-area {
     display: flex;
-    padding: 12px;
+    padding: 10px;
     border-top: 1px solid #222;
+    background: #0f1117;
 }
 
 input {
@@ -85,26 +100,36 @@ input {
     border-radius: 8px;
     border: none;
     outline: none;
+    font-size: 14px;
 }
 
 button {
     margin-left: 8px;
-    padding: 12px 16px;
+    padding: 12px 14px;
     border: none;
     border-radius: 8px;
     background: #7c5cff;
     color: white;
 }
 
-/* 📱 MOBILE */
+/* 📱 MOBILE FIX (IMPORTANT PART) */
 @media (max-width: 768px) {
+
     .sidebar {
         display: none;
     }
 
     .msg {
-        max-width: 90%;
-        font-size: 13px;
+        max-width: 92%;
+        font-size: 14px;
+    }
+
+    .chat-box {
+        padding: 10px;
+    }
+
+    input {
+        font-size: 16px;
     }
 }
 
@@ -113,23 +138,27 @@ button {
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <h2>ConvoMate 🤖</h2>
-    <p style="font-size:12px;color:#aaa;">built by Arjun Mondal</p>
+<div class="container">
 
-    <h4>History</h4>
-    <div id="history"></div>
-</div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>ConvoMate 🤖</h2>
+        <p style="font-size:12px;color:#aaa;">by Arjun Mondal</p>
 
-<!-- CHAT -->
-<div class="chat-container">
+        <h4 style="margin-top:15px;">History</h4>
+        <div id="history"></div>
+    </div>
 
-    <div class="chat-box" id="chat"></div>
+    <!-- CHAT -->
+    <div class="chat">
 
-    <div class="input-area">
-        <input id="input" placeholder="Ask anything..." />
-        <button onclick="send()">Send</button>
+        <div class="chat-box" id="chat"></div>
+
+        <div class="input-area">
+            <input id="input" placeholder="Ask anything..." />
+            <button onclick="send()">Send</button>
+        </div>
+
     </div>
 
 </div>
@@ -141,7 +170,7 @@ function addHistory(text) {
 
     let item = document.createElement("div");
     item.className = "history-item";
-    item.innerText = text.slice(0, 40);
+    item.innerText = text.slice(0, 35);
 
     item.onclick = () => {
         document.getElementById("input").value = text;
