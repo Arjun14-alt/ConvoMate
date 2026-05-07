@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
+<!-- ✅ IMPORTANT FOR MOBILE -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ConvoMate</title>
 
 <style>
+
 body {
     margin: 0;
     font-family: "Inter", Arial, sans-serif;
@@ -12,6 +17,7 @@ body {
     color: white;
     display: flex;
     height: 100vh;
+    overflow: hidden;
 }
 
 /* Sidebar */
@@ -21,13 +27,13 @@ body {
     backdrop-filter: blur(12px);
     border-right: 1px solid rgba(255,255,255,0.06);
     padding: 22px;
+    flex-shrink: 0;
 }
 
 .sidebar h2 {
     font-size: 20px;
     margin-bottom: 10px;
     color: #9b7bff;
-    letter-spacing: 0.5px;
 }
 
 .credit {
@@ -41,6 +47,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 /* Chat box */
@@ -55,10 +62,10 @@ body {
     margin: 10px 0;
     padding: 14px 16px;
     border-radius: 16px;
-    max-width: 72%;
+    max-width: 70%;
     line-height: 1.5;
     font-size: 14px;
-    animation: fade 0.25s ease;
+    word-wrap: break-word;
 }
 
 /* user */
@@ -66,20 +73,18 @@ body {
     background: linear-gradient(135deg, #7c5cff, #9b7bff);
     margin-left: auto;
     text-align: right;
-    box-shadow: 0 8px 20px rgba(124, 92, 255, 0.2);
 }
 
 /* bot */
 .bot {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.08);
-    backdrop-filter: blur(10px);
 }
 
 /* input area */
 .input-area {
     display: flex;
-    padding: 16px;
+    padding: 14px;
     background: rgba(10, 12, 18, 0.7);
     backdrop-filter: blur(12px);
     border-top: 1px solid rgba(255,255,255,0.06);
@@ -104,18 +109,62 @@ button {
     background: linear-gradient(135deg, #7c5cff, #9b7bff);
     color: white;
     cursor: pointer;
-    transition: 0.2s;
 }
 
-button:hover {
-    transform: scale(1.05);
+/* ========================= */
+/* 📱 MOBILE RESPONSIVENESS */
+/* ========================= */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 200px;
+        padding: 16px;
+    }
+
+    .msg {
+        max-width: 80%;
+    }
 }
 
-/* animation */
-@keyframes fade {
-    from {opacity: 0; transform: translateY(6px);}
-    to {opacity: 1; transform: translateY(0);}
+/* 📱 SMALL MOBILE */
+@media (max-width: 700px) {
+
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        padding: 12px;
+        text-align: center;
+    }
+
+    .chat-box {
+        padding: 12px;
+    }
+
+    .msg {
+        max-width: 90%;
+        font-size: 13px;
+    }
+
+    .input-area {
+        padding: 10px;
+    }
+
+    input {
+        font-size: 13px;
+        padding: 12px;
+    }
+
+    button {
+        padding: 12px 14px;
+    }
 }
+
 </style>
 </head>
 
@@ -124,7 +173,7 @@ button:hover {
 <div class="sidebar">
     <h2>ConvoMate 🤖</h2>
     <p style="color:#aaa;font-size:13px;">
-        AI chat assistant powered by Groq LLM
+        AI assistant powered by Groq
     </p>
 
     <div class="credit">
