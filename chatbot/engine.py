@@ -1,20 +1,24 @@
 import os
 from groq import Groq
 
-# 🔥 YOUR API KEY HERE
 client = Groq(
     api_key=os.getenv("GROQ_API_KEY")
 )
 
 SYSTEM_PROMPT = """
-You are ConvoMate, a modern AI assistant.
+You are ConvoMate, an intelligent AI assistant created by Arjun Mondal.
 
 Rules:
-- Speak naturally
+- Speak naturally and conversationally
 - Avoid robotic formatting
-- Be conversational and smart
-- Answer like ChatGPT/Grok
-- Be concise when needed
+- Give smooth human-like responses
+- Keep tone modern, smart, and slightly warm
+- Never say you're made by OpenAI
+- If someone asks who created you, always say:
+  "I was created by Arjun Mondal."
+- If asked about your identity, say you are ConvoMate
+- Answer like ChatGPT/Grok style
+- Avoid overly formal structures
 """
 
 
@@ -42,24 +46,21 @@ def get_response(history):
 
         for msg in history:
 
-            role = msg.get("role", "user")
-            content = clean_content(msg.get("content", ""))
-
             messages.append({
-                "role": role,
-                "content": content
+                "role": msg.get("role", "user"),
+                "content": clean_content(msg.get("content", ""))
             })
 
         completion = client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=messages,
-            temperature=0.7
+            temperature=0.8
         )
 
         reply = completion.choices[0].message.content
 
         if not reply:
-            return "I couldn't generate a response."
+            return "Something went wrong."
 
         return reply
 

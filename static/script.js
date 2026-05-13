@@ -6,11 +6,46 @@ function addMessage(text, type){
 
     div.className = "msg " + type;
 
-    div.innerText = text;
-
     chat.appendChild(div);
 
+    // smooth typing effect
+    if(type === "bot"){
+        typeText(div, text);
+    }else{
+        div.innerText = text;
+    }
+
     chat.scrollTop = chat.scrollHeight;
+}
+
+
+/* CHATGPT-LIKE TYPING EFFECT */
+
+function typeText(element, text){
+
+    let index = 0;
+
+    element.innerText = "";
+
+    const speed = 12;
+
+    function typing(){
+
+        if(index < text.length){
+
+            element.innerText += text.charAt(index);
+
+            index++;
+
+            const chat = document.getElementById("chat");
+            chat.scrollTop = chat.scrollHeight;
+
+            setTimeout(typing, speed);
+
+        }
+    }
+
+    typing();
 }
 
 
@@ -25,6 +60,21 @@ async function send(){
     addMessage(message, "user");
 
     input.value = "";
+
+    // typing placeholder
+    const chat = document.getElementById("chat");
+
+    const loading = document.createElement("div");
+
+    loading.className = "msg bot";
+
+    loading.id = "loading";
+
+    loading.innerText = "Thinking...";
+
+    chat.appendChild(loading);
+
+    chat.scrollTop = chat.scrollHeight;
 
     try{
 
@@ -43,14 +93,20 @@ async function send(){
 
         const data = await response.json();
 
+        document.getElementById("loading").remove();
+
         addMessage(data.reply, "bot");
 
     } catch(err){
+
+        document.getElementById("loading").remove();
 
         addMessage("Connection error.", "bot");
     }
 }
 
+
+/* ENTER KEY */
 
 document
 .getElementById("input")
