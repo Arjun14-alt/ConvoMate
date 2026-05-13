@@ -3,32 +3,59 @@ from chatbot.engine import get_response
 
 app = Flask(__name__)
 
+# in-memory history
 history = []
 
 
 @app.route("/")
-def home():
+def landing():
+    return render_template("landing.html")
+
+
+@app.route("/chatpage")
+def chatpage():
     return render_template("chat.html")
 
 
-@app.route("/chat", methods=["POST"])
+@app.route("/api/chat", methods=["POST"])
 def chat():
 
     global history
 
-    user_msg = request.json.get("message", "")
+    try:
+        data = request.get_json()
 
-    # FORCE STRING SAFETY
-    user_msg = str(user_msg)
+        if not data:
+            return jsonify({"reply": "No input received."})
 
-    history.append({"role": "user", "content": user_msg})
+        user_message = str(data.get("message", "")).strip()
 
-    reply = get_response(history)
+        if not user_message:
+            return jsonify({"reply": "Empty message."})
 
-    history.append({"role": "assistant", "content": reply})
+        # store user msg
+        history.append({
+            "role": "user",
+            "content": user_message
+        })
 
-    return jsonify({"reply": reply})
+        # keep history short
+        history = history[-10:]
+
+        # AI response
+        reply = get_response(history)
+
+        # store AI msg
+        history.append({
+            "role": "assistant",
+            "content": reply
+        })
+
+        return jsonify({"reply": reply})
+
+    except Exception as e:
+        return jsonify({"reply": f"Server error: {str(e)}"})
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(debug=True)
