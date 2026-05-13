@@ -1,69 +1,50 @@
-function addMsg(text, type) {
-    const chat = document.getElementById("chat");
+function addMsg(text,type){
 
-    const msg = document.createElement("div");
-    msg.className = "msg " + type;
-    msg.innerText = text;
+const chat=document.getElementById("chat");
 
-    chat.appendChild(msg);
+const div=document.createElement("div");
+div.className="msg "+type;
+div.innerText=text;
 
-    // smooth scroll to bottom
-    chat.scrollTo({
-        top: chat.scrollHeight,
-        behavior: "smooth"
-    });
+chat.appendChild(div);
+chat.scrollTop=chat.scrollHeight;
 }
 
-async function send() {
-    const input = document.getElementById("input");
-    const text = input.value.trim();
+async function send(){
 
-    if (!text) return;
+const input=document.getElementById("input");
+const text=input.value.trim();
+if(!text)return;
 
-    addMsg(text, "user");
-    input.value = "";
+addMsg(text,"user");
+input.value="";
 
-    // typing indicator (fake but smooth UX)
-    const typing = document.createElement("div");
-    typing.className = "msg bot";
-    typing.innerText = "typing...";
-    typing.id = "typing";
-    document.getElementById("chat").appendChild(typing);
-
-    try {
-        const res = await fetch("/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ message: text })
-        });
-
-        const data = await res.json();
-
-        document.getElementById("typing")?.remove();
-
-        addMsg(data.reply, "bot");
-
-    } catch (err) {
-        document.getElementById("typing")?.remove();
-        addMsg("Connection error. Try again.", "bot");
-    }
-}
-
-// ENTER KEY SUPPORT (IMPORTANT FOR MOBILE FEEL)
-document.getElementById("input").addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-        send();
-    }
+const res=await fetch("/chat",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:text})
 });
 
-// OPTIONAL: auto focus on mobile open
-window.onload = () => {
-    document.getElementById("input").focus();
-};
-
-// PWA SERVICE WORKER
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/static/sw.js");
+const data=await res.json();
+addMsg(data.reply,"bot");
 }
+
+/* FILE UPLOAD + READ */
+document.getElementById("file").addEventListener("change", async function(){
+
+const file=this.files[0];
+if(!file)return;
+
+const form=new FormData();
+form.append("file",file);
+
+const res=await fetch("/upload",{
+method:"POST",
+body:form
+});
+
+const data=await res.json();
+
+addMsg("File uploaded: "+data.file,"bot");
+addMsg("Now you can ask questions about it.","bot");
+});

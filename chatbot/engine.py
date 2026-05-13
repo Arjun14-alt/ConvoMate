@@ -1,48 +1,32 @@
 import os
 from groq import Groq
 
-client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
-)
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
+def get_response(user_input):
 
-def get_response(conversation_history):
+    system_prompt = """
+You are ConvoMate, a smart real-world assistant.
+
+Rules:
+- Answer like ChatGPT, not Wikipedia
+- Be aware of current events (sports, news, trending topics)
+- If question is recent (matches, events), infer latest known info and respond naturally
+- Keep answers conversational and updated in tone
+- No rigid formatting
+- Be confident and slightly opinionated when needed
+"""
 
     try:
-
-        messages = [
-
-            {
-                "role": "system",
-                "content": """
-You are ConvoMate, a modern AI assistant built by Arjun Mondal.
-
-RULES:
-- Sound natural and intelligent
-- Avoid robotic templates
-- No "Definition", "Conclusion", etc.
-- Respond dynamically depending on question
-- Keep answers readable and modern
-- Remember previous messages naturally
-- Casual questions should feel human
-- Philosophical questions should include reasoning
-- Technical questions should be clear and practical
-
-Style:
-Smart, conversational, slightly witty, modern.
-"""
-            }
-
-        ]
-
-        messages.extend(conversation_history)
-
-        completion = client.chat.completions.create(
+        res = client.chat.completions.create(
             model="llama-3.1-8b-instant",
-            messages=messages
+            messages=[
+                {"role":"system","content":system_prompt},
+                {"role":"user","content":user_input}
+            ]
         )
 
-        return completion.choices[0].message.content
+        return res.choices[0].message.content
 
     except Exception as e:
-        return f"AI Error: {str(e)}"
+        return f"Error: {str(e)}"

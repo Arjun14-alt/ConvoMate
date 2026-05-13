@@ -1,45 +1,57 @@
 from flask import Flask, render_template, request, jsonify
 from chatbot.engine import get_response
+import os
 
 app = Flask(__name__)
 
-conversation_history = []
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+last_file_content = ""
 
 
 @app.route("/")
-def landing():
-    return render_template("landing.html")
-
-
-@app.route("/chatpage")
-def chatpage():
+def home():
     return render_template("chat.html")
 
 
 @app.route("/chat", methods=["POST"])
 def chat():
 
-    global conversation_history
+    global last_file_content
 
     user_message = request.json["message"]
 
-    conversation_history.append({
-        "role": "user",
-        "content": user_message
-    })
+    if last_file_content:
+        user_message = f"""
+User question: {user_message}
 
-    conversation_history = conversation_history[-12:]
+Context from uploaded file:
+{last_file_content}
+"""
 
-    reply = get_response(conversation_history)
+    reply = get_response(user_message)
 
-    conversation_history.append({
-        "role": "assistant",
-        "content": reply
-    })
+    return jsonify({"reply": reply})
 
-    return jsonify({
-        "reply": reply
-    })
+
+@app.route("/upload", methods=["POST"])
+def upload():
+
+    global last_file_content
+
+    file = request.files["file"]
+    path = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(path)
+
+    # read file (TXT only for now - safe + stable)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            last_file_content = f.read()
+    except:
+        last_file_content = "File uploaded but not readable (maybe binary like image/pdf)."
+
+    return jsonify({"file": file.filename})
 
 
 if __name__ == "__main__":

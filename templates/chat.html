@@ -2,47 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ConvoMate</title>
 
-<!-- PWA SUPPORT -->
-<link rel="manifest" href="/static/manifest.json">
-<meta name="theme-color" content="#7c3aed">
-<link rel="apple-touch-icon" href="/static/icon.png">
-
-<link rel="stylesheet"
-href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
-<body class="chat-body">
+<body>
 
-<div class="bg-glow"></div>
-
-<div class="chat-wrapper">
+<div class="app">
 
 <!-- TOP BAR -->
 <div class="topbar">
-    <div class="logo">ConvoMate</div>
-    <div class="subtitle">by Arjun Mondal</div>
+
+<img src="/static/logo.png" class="logo">
+
+<div class="brand">
+<div class="title">ConvoMate</div>
+<div class="sub">by Arjun Mondal</div>
+</div>
+
 </div>
 
 <!-- CHAT -->
-<div class="chat-box" id="chat"></div>
+<div class="chat" id="chat"></div>
 
 <!-- INPUT -->
-<div class="input-container">
+<div class="input-bar">
 
-<input
-id="input"
-placeholder="Message ConvoMate..."
-autocomplete="off"
-/>
+<label class="plus">
++
+<input type="file" id="file" hidden>
+</label>
 
-<button onclick="send()">↑</button>
+<input id="input" placeholder="Ask anything...">
+
+<button onclick="send()">➤</button>
 
 </div>
 
