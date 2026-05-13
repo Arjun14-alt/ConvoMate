@@ -6,38 +6,34 @@
 
 <title>ConvoMate</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="/static/style.css">
+
+<!-- Google Font (Geist-like modern substitute) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
 
-<div class="app">
+<!-- SPLASH SCREEN -->
+<div id="splash">
+    <img src="/static/logo.png" class="splash-logo">
+    <div class="splash-text">ConvoMate</div>
+</div>
 
-<!-- TOP BAR -->
+<!-- MAIN APP -->
+<div class="app hidden" id="app">
+
 <div class="topbar">
-
-<img src="/static/logo.png" class="logo">
-
-<div class="brand">
-<div class="title">ConvoMate</div>
-<div class="sub">by Arjun Mondal</div>
+    <img src="/static/logo.png" class="logo">
+    <div class="brand">ConvoMate</div>
 </div>
 
-</div>
+<div id="chat" class="chat"></div>
 
-<!-- CHAT -->
-<div class="chat" id="chat"></div>
+<div class="input-area">
 
-<!-- INPUT -->
-<div class="input-bar">
-
-<label class="plus">
-+
-<input type="file" id="file" hidden>
-</label>
-
-<input id="input" placeholder="Ask anything...">
+<input id="input" placeholder="Ask anything..." />
 
 <button onclick="send()">➤</button>
 
@@ -45,7 +41,7 @@
 
 </div>
 
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="/static/script.js"></script>
 
 </body>
 </html>
