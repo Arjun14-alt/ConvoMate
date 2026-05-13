@@ -4,25 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ConvoMate</title>
+<title>ConvoMate Chat</title>
 
 <link rel="stylesheet" href="/static/style.css">
 
-<!-- Google Font (Geist-like modern substitute) -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 </head>
 
-<body>
+<body class="chat-body">
 
-<!-- SPLASH SCREEN -->
-<div id="splash">
-    <img src="/static/logo.png" class="splash-logo">
-    <div class="splash-text">ConvoMate</div>
-</div>
-
-<!-- MAIN APP -->
-<div class="app hidden" id="app">
+<div class="chat-wrapper">
 
 <div class="topbar">
     <img src="/static/logo.png" class="logo">
@@ -31,12 +21,9 @@
 
 <div id="chat" class="chat"></div>
 
-<div class="input-area">
-
-<input id="input" placeholder="Ask anything..." />
-
-<button onclick="send()">➤</button>
-
+<div class="input-bar">
+    <input id="input" placeholder="Ask anything...">
+    <button onclick="send()">➤</button>
 </div>
 
 </div>

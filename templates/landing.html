@@ -1,41 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<title>ConvoMate</title>
 
-<title>ConvoMate AI</title>
-
-<link rel="stylesheet"
-href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 </head>
 
-<body class="landing-body">
+<body class="landing">
 
-<div class="landing-overlay"></div>
+<div class="bg-glow"></div>
 
-<div class="hero">
+<div class="intro-card">
 
-<div class="hero-badge">
-✨ AI Assistant by Arjun Mondal
-</div>
+<img src="/static/logo.png" class="intro-logo">
 
-<h1>
-ConvoMate
-</h1>
+<h1>ConvoMate</h1>
 
 <p>
-A futuristic conversational AI designed for natural thinking,
-deep conversations, and modern interaction.
+An intelligent conversational AI<br>
+designed for modern thinking.
 </p>
 
-<a href="/chatpage">
-<button class="launch-btn">
-Launch ConvoMate →
+<div class="creator">
+Created by <b>Arjun Mondal</b>
+</div>
+
+<a href="/chat">
+<button class="start-btn">
+Get Started →
 </button>
 </a>
 
