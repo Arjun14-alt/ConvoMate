@@ -1,12 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from chatbot.engine import get_response
 
-import os
-
 app = Flask(__name__)
-
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 conversation_history = []
 
@@ -18,7 +13,7 @@ def landing():
 
 @app.route("/chatpage")
 def chatpage():
-    return render_template("index.html")
+    return render_template("chat.html")
 
 
 @app.route("/chat", methods=["POST"])
@@ -33,7 +28,6 @@ def chat():
         "content": user_message
     })
 
-    # memory limit
     conversation_history = conversation_history[-12:]
 
     reply = get_response(conversation_history)
@@ -45,23 +39,6 @@ def chat():
 
     return jsonify({
         "reply": reply
-    })
-
-
-@app.route("/upload", methods=["POST"])
-def upload():
-
-    file = request.files["file"]
-
-    filepath = os.path.join(
-        UPLOAD_FOLDER,
-        file.filename
-    )
-
-    file.save(filepath)
-
-    return jsonify({
-        "message": f"{file.filename} uploaded successfully"
     })
 
 

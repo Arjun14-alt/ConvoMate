@@ -9,37 +9,35 @@ content="width=device-width, initial-scale=1.0">
 
 <title>ConvoMate AI</title>
 
-<meta name="description"
-content="ConvoMate is a modern AI assistant built by Arjun Mondal.">
-
 <link rel="stylesheet"
 href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
-<body>
+<body class="landing-body">
+
+<div class="landing-overlay"></div>
 
 <div class="hero">
 
+<div class="hero-badge">
+✨ AI Assistant by Arjun Mondal
+</div>
+
 <h1>
-ConvoMate 🤖
+ConvoMate
 </h1>
 
 <p>
-Your intelligent AI companion.
-Chat naturally. Explore ideas.
-Upload files. Think deeper.
+A futuristic conversational AI designed for natural thinking,
+deep conversations, and modern interaction.
 </p>
 
 <a href="/chatpage">
-<button>
-Launch ConvoMate
+<button class="launch-btn">
+Launch ConvoMate →
 </button>
 </a>
-
-<div class="credit">
-Built by Arjun Mondal
-</div>
 
 </div>
 

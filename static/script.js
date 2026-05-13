@@ -1,17 +1,3 @@
-function addHistory(text){
-
-let box=document.getElementById("history");
-
-let item=document.createElement("div");
-
-item.className="history-item";
-
-item.innerText=text.slice(0,40);
-
-box.prepend(item);
-
-}
-
 function addMsg(text,type){
 
 let chat=document.getElementById("chat");
@@ -31,13 +17,11 @@ async function send(){
 
 let input=document.getElementById("input");
 
-let text=input.value;
+let text=input.value.trim();
 
 if(!text)return;
 
 addMsg(text,"user");
-
-addHistory(text);
 
 input.value="";
 
@@ -58,5 +42,14 @@ message:text
 let data=await res.json();
 
 addMsg(data.reply,"bot");
-
 }
+
+document
+.getElementById("input")
+.addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+send();
+}
+
+});
