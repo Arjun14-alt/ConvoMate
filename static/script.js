@@ -1,55 +1,69 @@
-function addMsg(text,type){
+function addMsg(text, type) {
+    const chat = document.getElementById("chat");
 
-let chat=document.getElementById("chat");
+    const msg = document.createElement("div");
+    msg.className = "msg " + type;
+    msg.innerText = text;
 
-let div=document.createElement("div");
+    chat.appendChild(msg);
 
-div.className="msg "+type;
-
-div.innerText=text;
-
-chat.appendChild(div);
-
-chat.scrollTop=chat.scrollHeight;
+    // smooth scroll to bottom
+    chat.scrollTo({
+        top: chat.scrollHeight,
+        behavior: "smooth"
+    });
 }
 
-async function send(){
+async function send() {
+    const input = document.getElementById("input");
+    const text = input.value.trim();
 
-let input=document.getElementById("input");
+    if (!text) return;
 
-let text=input.value.trim();
+    addMsg(text, "user");
+    input.value = "";
 
-if(!text)return;
+    // typing indicator (fake but smooth UX)
+    const typing = document.createElement("div");
+    typing.className = "msg bot";
+    typing.innerText = "typing...";
+    typing.id = "typing";
+    document.getElementById("chat").appendChild(typing);
 
-addMsg(text,"user");
+    try {
+        const res = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: text })
+        });
 
-input.value="";
+        const data = await res.json();
 
-let res=await fetch("/chat",{
+        document.getElementById("typing")?.remove();
 
-method:"POST",
+        addMsg(data.reply, "bot");
 
-headers:{
-"Content-Type":"application/json"
-},
+    } catch (err) {
+        document.getElementById("typing")?.remove();
+        addMsg("Connection error. Try again.", "bot");
+    }
+}
 
-body:JSON.stringify({
-message:text
-})
-
+// ENTER KEY SUPPORT (IMPORTANT FOR MOBILE FEEL)
+document.getElementById("input").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        send();
+    }
 });
 
-let data=await res.json();
+// OPTIONAL: auto focus on mobile open
+window.onload = () => {
+    document.getElementById("input").focus();
+};
 
-addMsg(data.reply,"bot");
+// PWA SERVICE WORKER
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/static/sw.js");
 }
-
-document
-.getElementById("input")
-.addEventListener("keypress",function(e){
-
-if(e.key==="Enter"){
-send();
-}
-
-});

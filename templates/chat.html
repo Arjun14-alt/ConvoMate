@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
 
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
 <title>ConvoMate</title>
+
+<!-- PWA SUPPORT -->
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#7c3aed">
+<link rel="apple-touch-icon" href="/static/icon.png">
 
 <link rel="stylesheet"
 href="{{ url_for('static', filename='style.css') }}">
@@ -20,22 +24,16 @@ href="{{ url_for('static', filename='style.css') }}">
 
 <div class="chat-wrapper">
 
+<!-- TOP BAR -->
 <div class="topbar">
-
-<div>
-<div class="logo">
-ConvoMate
+    <div class="logo">ConvoMate</div>
+    <div class="subtitle">by Arjun Mondal</div>
 </div>
 
-<div class="subtitle">
-by Arjun Mondal
-</div>
-</div>
-
-</div>
-
+<!-- CHAT -->
 <div class="chat-box" id="chat"></div>
 
+<!-- INPUT -->
 <div class="input-container">
 
 <input
@@ -44,9 +42,7 @@ placeholder="Message ConvoMate..."
 autocomplete="off"
 />
 
-<button onclick="send()">
-↑
-</button>
+<button onclick="send()">↑</button>
 
 </div>
 
