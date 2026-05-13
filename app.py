@@ -7,24 +7,21 @@ history = []
 
 
 @app.route("/")
-def landing():
-    return render_template("landing.html")
-
-
-@app.route("/chat")
-def chat_page():
+def home():
     return render_template("chat.html")
 
 
-@app.route("/api/chat", methods=["POST"])
+@app.route("/chat", methods=["POST"])
 def chat():
 
     global history
 
-    msg = request.json["message"]
+    user_msg = request.json.get("message", "")
 
-    history.append({"role": "user", "content": msg})
-    history = history[-12:]
+    # FORCE STRING SAFETY
+    user_msg = str(user_msg)
+
+    history.append({"role": "user", "content": user_msg})
 
     reply = get_response(history)
 
